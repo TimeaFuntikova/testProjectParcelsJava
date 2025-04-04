@@ -1,0 +1,93 @@
+<div class="page-wrapper">
+  <div class="form-container">
+    <h2 class="form-title">Add Parcel 📦</h2>
+    <form #form="ngForm" (ngSubmit)="submitParcel()">
+
+      <div class="parcel-count">
+        <strong>Total Parcels Stored:</strong> {{ parcelCount }}
+      </div>
+
+      <div *ngIf="showSuccessMessage" class="success-message">
+        ✅ Parcel submitted successfully!
+      </div>
+
+      <!-- Parcel ID -->
+      <div class="form-group parcel-id-wrapper">
+        <label>Parcel ID</label>
+        <div class="parcel-id-container">
+          <div class="parcel-id-display">{{ parcel.parcelId }}</div>
+          <button type="button" class="copy-btn" (click)="copyParcelId()">📋</button>
+          <span class="copied-msg" *ngIf="copied">✔ Copied!</span>
+        </div>
+      </div>
+
+      <!-- Name -->
+      <div class="form-group">
+        <label>Name</label>
+        <input name="name" [(ngModel)]="parcel.address.name" required #nameRef="ngModel" />
+        <div class="error" *ngIf="formSubmitted && nameRef.invalid">Name is required</div>
+      </div>
+
+      <!-- Street -->
+      <div class="form-group">
+        <label>Street</label>
+        <input name="street" [(ngModel)]="parcel.address.street" required #streetRef="ngModel" />
+        <div class="error" *ngIf="formSubmitted && streetRef.invalid">Street is required</div>
+      </div>
+
+      <!-- Number -->
+      <div class="form-group">
+        <label>Number</label>
+        <input
+          name="number"
+          [(ngModel)]="parcel.address.number"
+          required
+          pattern="^[a-zA-Z0-9\-\/]{1,15}$"
+          #numberRef="ngModel"
+        />
+        <div class="error" *ngIf="formSubmitted && numberRef.invalid">
+          House number must be 1–15 characters: letters, numbers, `/` or `-`
+        </div>
+      </div>
+
+      <!-- City -->
+      <div class="form-group">
+        <label>City</label>
+        <input name="city" [(ngModel)]="parcel.address.city" required #cityRef="ngModel" />
+        <div class="error" *ngIf="formSubmitted && cityRef.invalid">City is required</div>
+      </div>
+
+      <!-- Postcode -->
+      <div class="form-group">
+        <label>Postcode (5 digits)</label>
+        <input
+          name="postcode"
+          [(ngModel)]="parcel.address.postcode"
+          required
+          pattern="^[0-9]{5}$"
+          #postcodeRef="ngModel"
+        />
+        <div class="error" *ngIf="formSubmitted && postcodeRef.invalid">
+          Postcode must be exactly 5 digits
+        </div>
+      </div>
+
+      <div class="button-wrapper">
+        <button type="submit">📨 Submit</button>
+        <button type="button" (click)="nextParcel()">➕ Next</button>
+        <button type="button" class="clear" (click)="clearForm()">🗑️ Clear</button>
+      </div>
+
+      <div *ngIf="parcelsBuffer.length > 0" class="buffer-preview">
+        <h4>Pending Parcels</h4>
+        <ul>
+          <li *ngFor="let p of parcelsBuffer">
+            {{ p.parcelId }} – {{ p.address.name }}, {{ p.address.postcode }}
+          </li>
+        </ul>
+      </div>
+
+    </form>
+
+  </div>
+</div>
