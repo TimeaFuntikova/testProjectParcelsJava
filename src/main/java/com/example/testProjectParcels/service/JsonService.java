@@ -5,7 +5,6 @@ import com.example.testProjectParcels.model.InputData;
 import com.google.gson.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -14,25 +13,12 @@ import java.nio.file.Files;
  * Class for creating and updating JSON file with parcel data.
  */
 public class JsonService {
+    private static final Logger logger = LoggerFactory.getLogger(JsonService.class);
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    private static final Logger logger = LoggerFactory.getLogger(JsonService.class);
-
-    /**
-     * Method for adding a new parcel to the JSON file.
-     * @param inputData Input data containing the parcel ID and address
-     * @return true if the parcel was added successfully, false otherwise
-     */
-    public boolean addParcelToFile(InputData inputData) {
-        return addParcelToSourceFile(inputData, Messages.FILE_NAME_SOURCE.getMessage());
-    }
-
-    /**
-     * Method for adding a new parcel to the JSON file based on the postcode.
-     */
     public void addParcelToPostcodeFile(InputData inputData) {
         String postcode = inputData.getAddress().getPostcode();
-        String fileName = "parcela" + postcode + ".json";
+        String fileName = "parcela_" + postcode + ".json";
         addParcelToSourceFile(inputData, fileName);
     }
 
