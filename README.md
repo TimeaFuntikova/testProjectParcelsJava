@@ -132,15 +132,6 @@ Usage [`jpackage`](https://docs.oracle.com/en/java/javase/17/jpackage/overview/j
 
 ---
 
-## 📌 Future Enhancements
-
-- [ ] Dashboard for managing stored parcels
-- [ ] Export parcels to CSV
-- [ ] Cloud sync / storage backend
-- [ ] User login (admin access control)
-
----
-
 ## 👨‍💻 Author
 
 **timea funtikova**  
