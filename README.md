@@ -137,7 +137,3 @@ Usage [`jpackage`](https://docs.oracle.com/en/java/javase/17/jpackage/overview/j
 **timea funtikova**  
 timea.funtik@gmail.com  
 [github.com/TimeaFuntikova](https://github.com/TimeaFuntikova)
-
----
-
-> Made with ☕, 💻, and a whole lotta love.
