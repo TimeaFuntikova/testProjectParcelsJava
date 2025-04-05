@@ -1,11 +1,11 @@
-import { Component, Inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { PLATFORM_ID } from '@angular/core';
-import { InputData } from '../model/InputData';
-
+import { Component, Inject, OnInit} from '@angular/core';
 import { ViewChild } from '@angular/core';
+import { PLATFORM_ID } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgForm } from '@angular/forms';
+import { InputData } from '../model/InputData';
+import {ParcelService} from '../services/parcel.service';
 
 @Component({
   selector: 'app-parcel-form',
@@ -14,7 +14,7 @@ import { NgForm } from '@angular/forms';
   templateUrl: './parcel-form.component.html',
   styleUrls: ['./parcel-form.component.css']
 })
-export class ParcelFormComponent {
+export class ParcelFormComponent implements OnInit {
 
   @ViewChild('form') form!: NgForm;
 
@@ -23,17 +23,28 @@ export class ParcelFormComponent {
   parcelCount: number = 0;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private parcelService: ParcelService
   ) {}
-
 
   ngOnInit(): void {
     this.generateNewParcel();
-    //TODO: fetch from server and send to server
-    //this.fetchParcelCount();
+    this.fetchParcelCount();
+  }
+
+  fetchParcelCount(): void {
+    this.parcelService.getParcelCount().subscribe({
+      next: (response) => {
+        this.parcelCount = response.count;
+      },
+      error: (err) => {
+        console.error('Failed to fetch parcel count', err);
+      }
+    });
   }
 
   copied: boolean = false;
+
 
   copyParcelId() {
     if (navigator.clipboard) {
@@ -69,6 +80,7 @@ export class ParcelFormComponent {
     }
     return id;
   }
+
   submitParcel() {
     if (!this.validateForm()) {
       console.warn('Form is invalid.');
@@ -80,15 +92,20 @@ export class ParcelFormComponent {
       return;
     }
 
-    this.parcelsBuffer.push({ ...this.parcel });
-    this.submittedIds.add(this.parcel.parcelId);
-    this.parcelCount++;
-    this.parcelsBuffer = [];
+    this.parcelService.sendParcel(this.parcel).subscribe({
+      next: () => {
+        this.submittedIds.add(this.parcel.parcelId);
+        this.resetFormUI();
+        this.parcelsBuffer = [];
+        this.fetchParcelCount();
 
-    this.resetFormUI();
-
-    this.showSuccessMessage = true;
-    setTimeout(() => (this.showSuccessMessage = false), 3000);
+        this.showSuccessMessage = true;
+        setTimeout(() => (this.showSuccessMessage = false), 3000);
+      },
+      error: (err) => {
+        console.error('Failed to send parcel:', err);
+      }
+    });
   }
   showSuccessMessage: boolean = false;
 
@@ -127,13 +144,23 @@ export class ParcelFormComponent {
 
     this.parcelsBuffer.push({ ...this.parcel });
     this.submittedIds.add(this.parcel.parcelId);
-    this.parcelCount++;
 
-    this.resetFormUI();
+    this.parcelService.sendParcel(this.parcel).subscribe({
+      next: () => {
+        this.fetchParcelCount();
+        this.resetFormUI();
+        this.showNextMessage = true;
 
-    this.showNextMessage = true;
-    setTimeout(() => (this.showNextMessage = false), 2000);
+        setTimeout(() => this.showNextMessage = false, 2000);
+      },
+      error: (err) => {
+        console.error('Failed to send parcel:', err);
+        alert('Something went wrong while sending the parcel.');
+      }
+    });
   }
+
+
   showNextMessage: boolean = false;
 
   validateForm(): boolean {
