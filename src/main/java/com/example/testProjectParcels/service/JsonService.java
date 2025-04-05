@@ -4,6 +4,7 @@ import com.example.testProjectParcels.enums.Messages;
 import com.example.testProjectParcels.model.InputData;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,28 @@ import java.util.List;
 /**
  * Service class for handling JSON file operations related to parcels.
  */
+@Getter
 @Service
 public class JsonService {
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
     private static final Logger logger = LoggerFactory.getLogger(JsonService.class);
+
+    private final String sourceFileName;
+    private final String organizedPrefix;
+
+    public JsonService() {
+        this.sourceFileName = Messages.FILE_NAME_SOURCE.getMessage();
+        this.organizedPrefix = Messages.FILE_NAME_ORGANIZED.getMessage();
+    }
+
+    /**
+     * Constructor for JsonService with a custom source file name - for testing purposes.
+     * @param sourceFileName Custom source file name
+     */
+    public JsonService(String sourceFileName) {
+        this.sourceFileName = sourceFileName;
+        this.organizedPrefix = Messages.FILE_NAME_ORGANIZED.getMessage();
+    }
 
     /**
      * Adds a parcel to the source file.
@@ -29,7 +47,7 @@ public class JsonService {
      * @return true if added successfully, false otherwise
      */
     public boolean addParcelToSourceFile(InputData inputData) {
-        File sourceFile = new File(Messages.FILE_NAME_SOURCE.getMessage());
+        File sourceFile = new File(sourceFileName);
         List<InputData> existingParcels = new ArrayList<>();
 
         try {
@@ -73,8 +91,7 @@ public class JsonService {
      * @return true if added successfully, false otherwise
      */
     public boolean addParcelToPostcodeFile(InputData inputData) {
-        String postcode = inputData.getAddress().getPostcode();
-        String fileName = Messages.FILE_NAME_ORGANIZED.getMessage() + postcode + ".json";
+        String fileName = organizedPrefix + inputData.getAddress().getPostcode() + ".json";
         File file = new File(fileName);
         List<InputData> parcels = new ArrayList<>();
 
