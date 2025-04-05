@@ -1,10 +1,12 @@
 package com.example.testProjectParcels;
 
-import com.example.testProjectParcels.controller.Controller;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class ProcessorApplication {
+
     public static void main(String[] args) {
-       Controller controller = new Controller();
-       controller.processFromController();
+        SpringApplication.run(ProcessorApplication.class, args);
     }
 }
