@@ -6,7 +6,14 @@ public enum Messages {
     RECORD_NOT_ADDED("Record not added"),
     RECORD_EXISTS_IN_FILE("Record already exists in file "),
     FILE_CREATED("File created successfully "),
-    FILE_UPDATED("File updated successfully ");
+    FILE_UPDATED("File updated successfully "),
+    FAILED_TO_READ("Failed to read file"),
+    COUNT("count"),
+    PARCELS("parcels"),
+    INVALID_DATA("❌ Invalid input data."),
+    MISSING_DATA("⚠️ Missing required parcel fields."),
+    ADDED_SUCCESSFULLY("✅ Parcel added successfully."),
+    JSON_FILE_TYPE(".json");
 
     private final String message;
 
@@ -14,7 +21,7 @@ public enum Messages {
         this.message = message;
     }
 
-    public String getMessage() {
+    public String get() {
         return message;
     }
 }

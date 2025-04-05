@@ -1,5 +1,6 @@
 package com.example.testProjectParcels.service;
 
+import com.example.testProjectParcels.enums.Messages;
 import com.example.testProjectParcels.model.InputData;
 import com.google.gson.*;
 import lombok.Setter;
@@ -21,7 +22,6 @@ public class ParcelProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(ParcelProcessor.class);
 
-    /*For testing purposes only*/
     @Autowired
     private JsonService jsonService;
 
@@ -41,23 +41,22 @@ public class ParcelProcessor {
         return jsonService.addParcelToPostcodeFile(parcel);
     }
 
-
     /**
      * Gets the count of parcels in the source file.
      * @return Map with postcode as key and parcel count as value
      */
     public Map<String, Integer> getParcelCount() {
         File file = new File(jsonService.getSourceFileName());
-        if (!file.exists()) return Collections.singletonMap("count", 0);
+        if (!file.exists()) return Collections.singletonMap(Messages.COUNT.get(), 0);
 
         try (Reader reader = new FileReader(file)) {
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-            JsonArray parcels = json.getAsJsonArray("parcels");
+            JsonArray parcels = json.getAsJsonArray(Messages.PARCELS.get());
             int count = (parcels != null) ? parcels.size() : 0;
-            return Collections.singletonMap("count", count);
+            return Collections.singletonMap(Messages.COUNT.get(), count);
         } catch (Exception e) {
-            logger.error("Failed to read parcel count", e);
-            return Collections.singletonMap("count", 0);
+            logger.error(Messages.FAILED_TO_READ.get(), e);
+            return Collections.singletonMap(Messages.COUNT.get(), 0);
         }
     }
 

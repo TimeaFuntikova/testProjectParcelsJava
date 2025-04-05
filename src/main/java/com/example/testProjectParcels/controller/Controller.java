@@ -1,5 +1,6 @@
 package com.example.testProjectParcels.controller;
 
+import com.example.testProjectParcels.enums.Messages;
 import com.example.testProjectParcels.model.InputData;
 import com.example.testProjectParcels.service.ParcelProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +36,14 @@ public class Controller {
     @PostMapping("/add")
     public ResponseEntity<String> addParcel(@RequestBody InputData data) {
         if (data.getParcelId() == null || data.getAddress() == null || data.getAddress().getPostcode() == null) {
-            return ResponseEntity.badRequest().body("❌ Invalid input data.");
+            return ResponseEntity.badRequest().body(Messages.INVALID_DATA.get());
         }
 
         if (!data.isValid()) {
-            return ResponseEntity.badRequest().body("⚠️ Missing required parcel fields.");
+            return ResponseEntity.badRequest().body(Messages.MISSING_DATA.get());
         }
 
         processor.process(data);
-        return ResponseEntity.ok("✅ Parcel added successfully.");
+        return ResponseEntity.ok(Messages.ADDED_SUCCESSFULLY.get());
     }
 }

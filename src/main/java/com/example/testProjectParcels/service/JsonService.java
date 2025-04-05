@@ -28,8 +28,8 @@ public class JsonService {
     private final String organizedPrefix;
 
     public JsonService() {
-        this.sourceFileName = Messages.FILE_NAME_SOURCE.getMessage();
-        this.organizedPrefix = Messages.FILE_NAME_ORGANIZED.getMessage();
+        this.sourceFileName = Messages.FILE_NAME_SOURCE.get();
+        this.organizedPrefix = Messages.FILE_NAME_ORGANIZED.get();
     }
 
     /**
@@ -38,7 +38,7 @@ public class JsonService {
      */
     public JsonService(String sourceFileName) {
         this.sourceFileName = sourceFileName;
-        this.organizedPrefix = Messages.FILE_NAME_ORGANIZED.getMessage();
+        this.organizedPrefix = Messages.FILE_NAME_ORGANIZED.get();
     }
 
     /**
@@ -54,14 +54,14 @@ public class JsonService {
             if (sourceFile.exists() && sourceFile.length() > 0) {
                 String content = new String(Files.readAllBytes(sourceFile.toPath()), StandardCharsets.UTF_8);
                 JsonObject root = JsonParser.parseString(content).getAsJsonObject();
-                JsonArray array = root.getAsJsonArray("parcels");
+                JsonArray array = root.getAsJsonArray(Messages.PARCELS.get());
 
                 Type listType = new TypeToken<List<InputData>>() {}.getType();
                 existingParcels = gson.fromJson(array, listType);
 
                 for (InputData existing : existingParcels) {
                     if (existing.getParcelId().equals(inputData.getParcelId())) {
-                        logger.warn("Parcel already exists in source file.");
+                        logger.warn(Messages.RECORD_EXISTS_IN_FILE.get());
                         return false;
                     }
                 }
@@ -70,13 +70,13 @@ public class JsonService {
             existingParcels.add(inputData);
 
             JsonObject root = new JsonObject();
-            root.add("parcels", gson.toJsonTree(existingParcels));
+            root.add(Messages.PARCELS.get(), gson.toJsonTree(existingParcels));
 
             try (Writer writer = new FileWriter(sourceFile)) {
                 gson.toJson(root, writer);
             }
 
-            logger.info("✅ Parcel added to source file.");
+            logger.info(Messages.ADDED_SUCCESSFULLY.get());
             return true;
 
         } catch (IOException | JsonParseException e) {
@@ -91,15 +91,15 @@ public class JsonService {
      * @return true if added successfully, false otherwise
      */
     public boolean addParcelToPostcodeFile(InputData inputData) {
-        String fileName = organizedPrefix + inputData.getAddress().getPostcode() + ".json";
+        String fileName = organizedPrefix + inputData.getAddress().getPostcode() + Messages.JSON_FILE_TYPE.get();
         File file = new File(fileName);
         List<InputData> parcels = new ArrayList<>();
 
         try {
             if (file.exists() && file.length() > 0) {
-                String content = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8).trim();
+                String content = Files.readString(file.toPath()).trim();
                 JsonObject root = JsonParser.parseString(content).getAsJsonObject();
-                JsonArray array = root.getAsJsonArray("parcels");
+                JsonArray array = root.getAsJsonArray(Messages.PARCELS.get());
 
                 Type listType = new TypeToken<List<InputData>>() {}.getType();
                 parcels = gson.fromJson(array, listType);
@@ -114,7 +114,7 @@ public class JsonService {
 
             parcels.add(inputData);
             JsonObject wrapper = new JsonObject();
-            wrapper.add("parcels", gson.toJsonTree(parcels));
+            wrapper.add(Messages.PARCELS.get(), gson.toJsonTree(parcels));
 
             try (Writer writer = new FileWriter(file)) {
                 gson.toJson(wrapper, writer);
