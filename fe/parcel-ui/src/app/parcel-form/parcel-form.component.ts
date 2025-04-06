@@ -1,9 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit} from '@angular/core';
-import { ViewChild } from '@angular/core';
-import { PLATFORM_ID } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgForm } from '@angular/forms';
+import { Component, Inject, OnInit, ViewChild, PLATFORM_ID} from '@angular/core';
+import { FormsModule, NgForm} from '@angular/forms';
 import { InputData } from '../model/InputData';
 import {ParcelService} from '../services/parcel.service';
 
@@ -16,15 +13,19 @@ import {ParcelService} from '../services/parcel.service';
 })
 export class ParcelFormComponent implements OnInit {
 
-  @ViewChild('form') form!: NgForm;
-
   parcel: any;
   submittedIds: Set<string> = new Set();
   parcelCount: number = 0;
+  formSubmitted: boolean = false;
+  parcelsBuffer: InputData[] = [];
+  copied: boolean = false;
+  showSuccessMessage: boolean = false;
+  showNextMessage: boolean = false;
+  @ViewChild('form') form!: NgForm;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private parcelService: ParcelService
+    @Inject(PLATFORM_ID) private readonly platformId: Object,
+    private readonly parcelService: ParcelService
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +35,7 @@ export class ParcelFormComponent implements OnInit {
 
   fetchParcelCount(): void {
     this.parcelService.getParcelCount().subscribe({
-      next: (response) => {
+      next: (response:{count: number}): void => {
         this.parcelCount = response.count;
       },
       error: (err) => {
@@ -43,14 +44,11 @@ export class ParcelFormComponent implements OnInit {
     });
   }
 
-  copied: boolean = false;
-
-
-  copyParcelId() {
+  copyParcelId(): void {
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(this.parcel.parcelId).then(() => {
+      navigator.clipboard.writeText(this.parcel.parcelId).then((): void => {
         this.copied = true;
-        setTimeout(() => (this.copied = false), 2000);
+        setTimeout((): boolean => (this.copied = false), 2000);
       }).catch(err => {
         console.error('Failed to copy!', err);
       });
@@ -60,7 +58,7 @@ export class ParcelFormComponent implements OnInit {
   }
 
   generateNewParcel(): void {
-    const id = this.generateParcelId();
+    const id: string = this.generateParcelId();
     this.parcel = {
       parcelId: id,
       address: {
@@ -74,14 +72,14 @@ export class ParcelFormComponent implements OnInit {
   }
 
   generateParcelId(): string {
-    let id = '';
+    let id: string = '';
     while (id.length < 12) {
       id += Math.floor(Math.random() * 10);
     }
     return id;
   }
 
-  submitParcel() {
+  submitParcel(): void {
     if (!this.validateForm()) {
       console.warn('Form is invalid.');
       return;
@@ -93,9 +91,9 @@ export class ParcelFormComponent implements OnInit {
     }
 
     this.parcelService.sendParcel(this.parcel).subscribe({
-      next: () => {
+      next: (): void => {
         this.submittedIds.add(this.parcel.parcelId);
-        this.resetFormUI();
+        this.clearForm();
         this.parcelsBuffer = [];
         this.fetchParcelCount();
 
@@ -107,7 +105,6 @@ export class ParcelFormComponent implements OnInit {
       }
     });
   }
-  showSuccessMessage: boolean = false;
 
   clearDraft(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -123,15 +120,12 @@ export class ParcelFormComponent implements OnInit {
       a.street?.trim() &&
       a.number?.trim() &&
       a.city?.trim() &&
-      /^[a-zA-Z0-9\-\/]{1,15}$/.test(a.number) &&
+      /^[a-zA-Z0-9\-/]{1,15}$/.test(a.number) &&
       /^[0-9]{5}$/.test(a.postcode)
     );
   }
 
-  formSubmitted: boolean = false;
-  parcelsBuffer: InputData[] = [];
-
-  nextParcel() {
+  nextParcel(): void {
     if (!this.validateForm()) {
       console.warn('Form is invalid.');
       return;
@@ -146,9 +140,9 @@ export class ParcelFormComponent implements OnInit {
     this.submittedIds.add(this.parcel.parcelId);
 
     this.parcelService.sendParcel(this.parcel).subscribe({
-      next: () => {
+      next: (): void => {
         this.fetchParcelCount();
-        this.resetFormUI();
+        this.clearForm();
         this.showNextMessage = true;
 
         setTimeout(() => this.showNextMessage = false, 2000);
@@ -159,9 +153,6 @@ export class ParcelFormComponent implements OnInit {
       }
     });
   }
-
-
-  showNextMessage: boolean = false;
 
   validateForm(): boolean {
     this.formSubmitted = true;
@@ -174,31 +165,12 @@ export class ParcelFormComponent implements OnInit {
     return this.isFormValid();
   }
 
-  resetFormUI() {
+  clearForm(): void {
     this.formSubmitted = false;
     this.clearDraft();
     this.generateNewParcel();
 
-    setTimeout(() => {
-      this.form?.resetForm({
-        parcelId: this.parcel.parcelId,
-        address: {
-          name: '',
-          street: '',
-          number: '',
-          city: '',
-          postcode: ''
-        }
-      });
-    });
-  }
-
-  clearForm() {
-    this.formSubmitted = false;
-    this.clearDraft();
-    this.generateNewParcel();
-
-    setTimeout(() => {
+    setTimeout((): void => {
       this.form?.resetForm({
         parcelId: this.parcel.parcelId,
         address: {
