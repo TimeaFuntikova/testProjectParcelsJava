@@ -10,13 +10,13 @@ public enum Messages {
     FAILED_TO_READ("Failed to read file"),
     COUNT("count"),
     PARCELS("parcels"),
-    INVALID_DATA("❌ Invalid input data."),
-    MISSING_DATA("⚠️ Missing required parcel fields."),
-    ADDED_SUCCESSFULLY("✅ Parcel added successfully."),
+    INVALID_DATA("Invalid input data."),
+    MISSING_DATA("Missing required parcel fields."),
+    ADDED_SUCCESSFULLY("Parcel added successfully."),
     JSON_FILE_TYPE(".json"),
-    UNSUPPORTED_BROWSER("⚠️ Unsupported browser. Please open manually: "),
-    OPENING_BROWSER("🌐 Opening browser at: "),
-    FAILED_TO_OPEN_BROWSER("❌ Failed to open browser: ");
+    UNSUPPORTED_BROWSER("Unsupported browser. Please open manually: "),
+    OPENING_BROWSER("Opening browser at: "),
+    FAILED_TO_OPEN_BROWSER("Failed to open browser: ");
 
     private final String message;
 
