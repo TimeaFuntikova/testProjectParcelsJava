@@ -1,0 +1,14 @@
+{
+  "parcels": [
+    {
+      "parcelId": "b648914a-533c-4d25-b117-66f70d7be934",
+      "address": {
+        "name": "User Tester",
+        "street": "Main",
+        "number": "12",
+        "city": "TestCity",
+        "postcode": "99999"
+      }
+    }
+  ]
+}
