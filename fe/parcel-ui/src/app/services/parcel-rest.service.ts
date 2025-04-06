@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {ParcelDTO} from '../model/parcel-dto';
+import { ParcelDTO } from '../model/parcel-dto';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ParcelRestService {
-  private apiUrl = 'http://localhost:8080/api/parcels';
+  private apiUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
