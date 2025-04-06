@@ -78,14 +78,15 @@
         <button type="button" class="clear" (click)="clearForm()">🗑️ Clear</button>
       </div>
 
-      <div *ngIf="parcelsBuffer.length > 0" class="buffer-preview">
+      <div *ngIf="bufferService.getBuffer().length > 0" class="buffer-preview">
         <h4>Pending Parcels</h4>
         <ul>
-          <li *ngFor="let p of parcelsBuffer">
+          <li *ngFor="let p of bufferService.getBuffer()">
             {{ p.parcelId }} – {{ p.address.name }}, {{ p.address.postcode }}
           </li>
         </ul>
       </div>
+
     </form>
 
   </div>
