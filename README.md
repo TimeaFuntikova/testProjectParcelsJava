@@ -19,6 +19,72 @@
 
 ---
 
+## ⚙️ Prerequisites
+- Before building or running the app, make sure you have the following installed:
+- Java 21+ – Required to build and run the Spring Boot backend
+- Node.js & npm – Required for running the Angular frontend
+- Angular CLI – Install with npm install -g @angular/cli
+- Maven – For building the backend (Spring Boot)
+- (Optional): Launch4j – For packaging the .jar into a native .exe
+
+---
+
+## 📦 Dependencies
+
+#### Backend (Spring Boot):
+- spring-boot-starter-web – REST controller support
+- spring-boot-starter-data-jpa – For potential database support
+- gson – JSON parsing and manipulation
+- lombok – Boilerplate code reduction
+- springdoc-openapi – Swagger UI for REST docs
+- h2database – Lightweight local DB (optional/test)
+- slf4j – Logging
+
+#### Frontend (Angular):
+- @angular/forms – Template-driven forms
+- rxjs – Reactive programming
+- @angular/common/http – HTTP requests
+
+#### Custom services:
+- ParcelRestService – Backend communication
+- ParcelFormService – Handles form logic
+- ParcelBufferService – Stores submitted parcel state
+
+---
+
+## 🧠 Key Design Decisions & Challenges
+  ✅ JSON Storage vs Database
+  The application writes parcels to structured JSON files based on postcode instead of using a traditional database. This was chosen to simplify deployment and fit project requirements. However, for scalability and better query support, a database is recommended in production scenarios.
+
+✅ Modularization
+The frontend and backend were cleanly separated:
+
+- Angular manages all form logic, validation, and feedback.
+
+- Spring Boot handles REST APIs, validation, and file processing.
+
+- Business logic (e.g. duplicate detection, JSON merging) is isolated into service classes for easy testing and reuse.
+
+✅ Input Validation 
+- Both layers validate:
+- Required fields
+- Format of house numbers and postcodes
+- Duplicates (checked against stored JSON files)
+
+✅ Executable Distribution
+- To improve UX for non-technical users, the final app:
+- Auto-launches the browser
+- Can be run via .exe or .bat without needing manual Java installation
+- Uses Launch4j for packaging
+
+✅ Challenges
+- 🧩 Mapping between DTOs and internal models (due to nested structures)
+
+- 📁 Managing parcel persistence cleanly across two JSON structures
+
+- 📦 Delivering a "real app" feel without external infrastructure
+
+
 ## 🧱 Project Structure
 ```plaintext
 /fe/                              → Frontend Angular project
