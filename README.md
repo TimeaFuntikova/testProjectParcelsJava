@@ -20,7 +20,7 @@
 ---
 
 ## 🧱 Project Structure
-
+```plaintext
 /fe/                              → Frontend Angular project
 │
 ├── parcel-ui/                    → Angular app for parcel form input
@@ -49,7 +49,7 @@
 ├── target/                      → Compiled build files (auto-generated)
 ├── pom.xml                      → Maven build configuration
 └── README.md                    → Project instructions or description
-
+```
 
 ## ▶️ How to Run the App
 
