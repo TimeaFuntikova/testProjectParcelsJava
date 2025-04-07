@@ -80,7 +80,7 @@ java -jar target/parcel-app.jar
 
 ## 🖱️ End-User Instructions
 
-1. Launch the application by double-clicking the provided `.jar` or `.exe`
+1. Launch the application by double-clicking the provided `.exe`
 2. Fill out parcel details
 3. Use:
    - **Next** → saves the parcel and clears the form
@@ -120,13 +120,12 @@ java -jar target/parcel-app.jar
 
 ## 🏗️ Build & Deploy (for distribution)
 
-Usage [`jpackage`](https://docs.oracle.com/en/java/javase/17/jpackage/overview/jpackage.html) or [`Launch4j`](http://launch4j.sourceforge.net/) to:
+Usage of [`Launch4j`](http://launch4j.sourceforge.net/) to:
 
 - Package the `.jar` as a `.exe` for Windows
 - Bundle a JRE so no Java installation is needed
-- Add a custom icon & metadata
 
-> Final deliverable = double-clickable `.exe` or `.jar`
+> Final deliverable = double-clickable `.exe` or `.jar` (exe recomended)
 
 ---
 
