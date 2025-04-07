@@ -21,15 +21,35 @@
 
 ## 🧱 Project Structure
 
-```plaintext
-/parcel-app/
+/fe/                              → Frontend Angular project
 │
-├── backend/        → Spring Boot REST API (serves API + frontend)
-├── frontend/       → Angular app for parcel form input
-└── docs/           → Documentation and JSON schema
-```
+├── parcel-ui/                    → Angular app for parcel form input
+├── src/                          → (Unused/misc in frontend)
+├── testProjectParcels/          → Shared or placeholder directory
+├── TestProjectParcelsJava/      → Legacy or transitional naming
+├── package-lock.json            → Node.js dependency lock file
+└── fe.iml                       → IntelliJ project metadata
 
----
+/test-project-parcels-java/      → Backend Spring Boot project
+│
+├── ParcelApp/                   → Final app distribution folder
+│   ├── docs/                    → User documentation (e.g. manual, README)
+│   ├── parcel-app.bat          → Script to launch the JAR
+│   ├── parcel-app.exe          → Windows executable (Launch4j)
+│   └── parcel-app.jar          → Compiled backend JAR (Spring Boot)
+│
+├── src/                         → Main source code (Java)
+│   └── main/java/com/example/testProjectParcels/
+│       ├── controller/          → REST API controllers
+│       ├── service/             → Business logic and JSON handling
+│       ├── model/               → Domain models (DTOs, InputData, etc.)
+│       ├── enums/               → Enum definitions
+│       └── browserLauncher/     → Class that opens the app in the browser
+│
+├── target/                      → Compiled build files (auto-generated)
+├── pom.xml                      → Maven build configuration
+└── README.md                    → Project instructions or description
+
 
 ## ▶️ How to Run the App
 
